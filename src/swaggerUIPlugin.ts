@@ -1,27 +1,27 @@
-import type { Config, Plugin } from 'payload'
+import type { Config, Plugin } from "payload";
 
 const swaggerUI =
   ({
-    specEndpoint = '/openapi.json',
-    docsUrl = '/docs',
+    specEndpoint = "/openapi.json",
+    docsUrl = "/docs",
     enabled = true,
   }: {
-    specEndpoint?: string
-    docsUrl?: string
-    enabled?: boolean
+    specEndpoint?: string;
+    docsUrl?: string;
+    enabled?: boolean;
   }): Plugin =>
   ({ endpoints = [], ...config }: Config): Config => {
     if (!enabled) {
-      return { ...config, endpoints }
+      return { ...config, endpoints };
     }
     return {
       ...config,
       endpoints: [
         ...endpoints,
         {
-          method: 'get',
+          method: "get",
           path: docsUrl,
-          handler: async req =>
+          handler: async (req) =>
             new Response(
               `
               <!DOCTYPE html>
@@ -42,18 +42,18 @@ const swaggerUI =
               <script>
                 window.onload = () => {
                   window.ui = SwaggerUIBundle({
-                    url: '${req.protocol}//${req.headers.get('host')}/api${specEndpoint}',
+                    url: '${req.protocol}//${req.headers.get("host")}${specEndpoint}',
                     dom_id: '#swagger-ui',
                   });
                 };
               </script>
               </body>
               </html>`,
-              { headers: { 'content-type': 'text/html' } },
+              { headers: { "content-type": "text/html" } }
             ),
         },
       ],
-    }
-  }
+    };
+  };
 
-export default swaggerUI
+export default swaggerUI;

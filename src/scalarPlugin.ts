@@ -1,18 +1,18 @@
-import type { Plugin } from 'payload'
+import type { Plugin } from "payload";
 
 const scalar =
   ({
-    specEndpoint = '/openapi.json',
-    docsUrl = '/docs',
+    specEndpoint = "/openapi.json",
+    docsUrl = "/docs",
     enabled = true,
   }: {
-    specEndpoint?: string
-    docsUrl?: string
-    enabled?: boolean
+    specEndpoint?: string;
+    docsUrl?: string;
+    enabled?: boolean;
   }): Plugin =>
   ({ endpoints = [], ...config }) => {
     if (!enabled) {
-      return { ...config, endpoints }
+      return { ...config, endpoints };
     }
 
     return {
@@ -20,10 +20,10 @@ const scalar =
       endpoints: [
         ...endpoints,
         {
-          method: 'get',
+          method: "get",
           path: docsUrl,
-          handler: async req => {
-            const fullSpecUrl = `${req.protocol}//${req.headers.get('host')}/api${specEndpoint}`
+          handler: async (req) => {
+            const fullSpecUrl = `${req.protocol}//${req.headers.get("host")}${specEndpoint}`;
 
             const html = `
               <!DOCTYPE html>
@@ -47,15 +47,15 @@ const scalar =
               <body>
                 <div id="scalar-api"></div>
               </body>
-              </html>`
+              </html>`;
 
             return new Response(html, {
-              headers: { 'content-type': 'text/html' },
-            })
+              headers: { "content-type": "text/html" },
+            });
           },
         },
       ],
-    }
-  }
+    };
+  };
 
-export default scalar
+export default scalar;
